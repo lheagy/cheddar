@@ -3,7 +3,7 @@
 utils
 =====
 
-.. automodule:: saycheese.utils
+.. automodule:: cheddar.utils
     :members:
     :undoc-members:
     :show-inheritance:

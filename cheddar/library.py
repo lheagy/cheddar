@@ -9,7 +9,7 @@ IMAGE_EXTENSION = ["jpg", "png"]
 VIDEO_EXTENSION = ["mp4"]
 
 IGNORE_STR = "._"
-SAYCHEESEINFO = '.saycheese'
+SAYCHEESEINFO = '.cheddar'
 
 
 class Library(properties.HasProperties):
@@ -49,8 +49,8 @@ class Library(properties.HasProperties):
         """
         media objects in the library
 
-        :rtype: saycheese.Media
-        :return: saycheese Media object
+        :rtype: cheddar.Media
+        :return: cheddar Media object
         """
         if getattr(self, '_media', None) is None:
             files = os.listdir(self.directory)
@@ -82,7 +82,7 @@ class Library(properties.HasProperties):
         media object for each of the videos in the library
 
         :rtype: list
-        :return: list of :class:saycheese.Media items for each video
+        :return: list of :class:cheddar.Media items for each video
         """
         if getattr(self, '_videos', None) is None:
             self._videos = [
@@ -107,7 +107,7 @@ class Library(properties.HasProperties):
         media object for each of the simage in the library
 
         :rtype: list
-        :return: list of :class:saycheese.Media items for each image
+        :return: list of :class:cheddar.Media items for each image
         """
         if getattr(self, '_images', None) is None:
             self._images = [

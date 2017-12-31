@@ -26,7 +26,7 @@ with open('README.rst') as f:
     LONG_DESCRIPTION = ''.join(f.readlines())
 
 setup(
-    name = 'saycheese',
+    name = 'cheddar',
     version = '0.0.1',
     packages = find_packages(),
     install_requires = [
@@ -36,10 +36,10 @@ setup(
     ],
     author = 'Lindsey Heagy',
     author_email = 'lindseyheagy@gmail.com',
-    description = 'saycheese',
+    description = 'cheddar',
     long_description = LONG_DESCRIPTION,
     keywords = 'photos, videos',
-    download_url = 'https://github.com/lheagy/saycheese',
+    download_url = 'https://github.com/lheagy/cheddar',
     classifiers=CLASSIFIERS,
     platforms = ['Windows', 'Linux', 'Solaris', 'Mac OS-X', 'Unix'],
     license='MIT License',

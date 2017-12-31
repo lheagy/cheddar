@@ -4,7 +4,7 @@ import tarfile
 import shutil
 import datetime
 
-import saycheese
+import cheddar
 
 
 ASSET_TAR = os.path.abspath(os.path.expanduser("./assets.tar.gz"))
@@ -20,7 +20,7 @@ class TestMediaAttributes(unittest.TestCase):
         tar.close()
 
     def test_library_attributes_images(self):
-        library = saycheese.Library(
+        library = cheddar.Library(
             directory=ASSET_DIR + os.path.sep + "banff"
         )
 
@@ -40,7 +40,7 @@ class TestMediaAttributes(unittest.TestCase):
         assert library.media[1].name == library.media_names[1]
 
     def test_library_attributes_mixed(self):
-        library = saycheese.Library(
+        library = cheddar.Library(
             directory=(
                 ASSET_DIR + os.path.sep +
                 os.path.sep.join(["windmill", "library1"])
@@ -63,7 +63,7 @@ class TestMediaAttributes(unittest.TestCase):
         )
 
     def test_library_rename_attributes(self):
-        library = saycheese.Library(
+        library = cheddar.Library(
             directory=ASSET_DIR + os.path.sep + "banff"
         )
 
@@ -105,7 +105,7 @@ class TestMediaAttributes(unittest.TestCase):
         library.rename("banff")
 
     def test_rename_contents(self):
-        library = saycheese.Library(
+        library = cheddar.Library(
             directory=ASSET_DIR + os.path.sep + "banff"
         )
 
