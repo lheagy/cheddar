@@ -1,5 +1,6 @@
 from exiftool import ExifTool
 import datetime
+import os
 
 
 def get_metadata(filepath):
@@ -63,6 +64,30 @@ def compute_timeshift(media1, media2, delta=None):
         delta = datetime.timedelta(seconds=0)
     return media2.datetime - media1.datetime + delta
 
+
+def open_files(filelist):
+    system_calls = {
+        "darwin": "open",
+        "linux": "eog",
+        "win32": "explorer"
+    }
+
+    if isinstance(filelist, str):
+        filelist = [filelist]
+
+    if len(filelist) == 0:
+        print("no files to open")
+        return
+
+    files = " ".join(["'{}'".format(file) for file in filelist])
+
+    try:
+        os.system(
+            "{} {}".format(system_calls[os.sys.platform], files)
+        )
+
+    except Exception:
+        raise Exception("Couldn't open {} ".format(files))
 
 # def merge_libraries(
 #     library1,

@@ -27,7 +27,9 @@ class Library(properties.HasProperties):
     @properties.validator('directory')
     def _ensure_abspath(self, change):
         value = change['value']
-        assert os.path.isdir(value), "Directory {} does not exist".format(value)
+        assert os.path.isdir(value), (
+            "Directory {} does not exist".format(value)
+        )
         change['value'] = os.path.abspath(os.path.expanduser(value))
 
     @property
@@ -69,6 +71,10 @@ class Library(properties.HasProperties):
         :return: list of strings of the filenames for each media item in the library
         """
         return [m.name for m in self.media]
+
+    @property
+    def _media_dict(self):
+        return dict(zip(self.media_names, self.media))
 
     @property
     def videos(self):
@@ -120,46 +126,55 @@ class Library(properties.HasProperties):
         """
         return [m.name for m in self.images]
 
-    def open_images(self):
+    def open_images(self, **kwargs):
         """
         open the images in the library
         """
-        images = [
-            self.directory + os.path.sep + img for img in self.image_names
-        ]
+        images = self.image_names
 
-        if len(images) > 0:
-            try:
-                os.system("open " + " ".join(images))
-            except Exception:
-                try:
-                    os.system("start " + " ".join(images))
-                except Exception:
-                    raise Exception("Couldn't open images")
+        if "camera" in kwargs:
+            camera = kwargs.pop("camera").lower()
+            images = [
+                im for im in self.image_names if
+                (
+                    camera in self._media_dict[im].camera_make.lower() or
+                    camera in self._media_dict[im].camera_model.lower()
+                )
+            ]
 
-    def open_videos(self):
+        images = [self.directory + os.path.sep + img for img in images]
+
+        utils.open_files(images)
+
+    def open_videos(self, **kwargs):
         """
         open the videos in the library
         """
+
+        videos = self.video_names
+
+        if "camera" in kwargs:
+            camera = kwargs.pop("camera").lower()
+            videos = [
+                vid for vid in self.video_names if
+                (
+                    camera in self._media_dict[vid].camera_make.lower() or
+                    camera in self._media_dict[vid].camera_model.lower()
+                )
+            ]
+
         videos = [
-            self.directory + os.path.sep + vid for vid in self.video_names
+            self.directory + os.path.sep + vid for vid in videos
         ]
 
-        if len(videos) > 0:
-            try:
-                os.system("open " + " ".join(videos))
-            except Exception:
-                try:
-                    os.system("start " + " ".join(videos))
-                except Exception:
-                    raise Exception("Couldn't open videos")
+        utils.open_files(videos)
 
-    def open(self):
+    def open(self, **kwargs):
         """
         open the images and the videos in the library
         """
-        self.open_images()
-        self.open_videos()
+        self.open_images(**kwargs)
+        self.open_videos(**kwargs)
 
     def rename(self, newname, verbose=True):
         """

@@ -10,6 +10,9 @@ DATETIMEKEY = {
     u"File:FileModifyDate": "{year:d}:{month:d}:{day:d} {hour:d}:{minute:d}:{second:d}-{}"
 }
 
+CAMERA_MAKE_KEY = u"EXIF:Make"
+CAMERA_MODEL_KEY = u"EXIF:Model"
+
 
 class Media(properties.HasProperties):
     """
@@ -105,17 +108,40 @@ class Media(properties.HasProperties):
 
         return datetime.datetime(**parsed_datetime.named)
 
+    @property
+    def camera_make(self):
+        """
+        camera
+
+        :rtype: string
+        :return: camera name
+        """
+
+        if CAMERA_MAKE_KEY in self.metadata:
+            return self.metadata[CAMERA_MAKE_KEY]
+        else:
+            return 'UNKNOWN'
+
+    @property
+    def camera_model(self):
+        """
+        camera
+
+        :rtype: string
+        :return: camera name
+        """
+
+        if CAMERA_MODEL_KEY in self.metadata:
+            return self.metadata[CAMERA_MODEL_KEY]
+        else:
+            return 'UNKNOWN'
+
     def open(self):
         """
         Open the file with the default application
         """
-        try:
-            os.system("open " + self.filepath)
-        except Exception:
-            try:
-                os.system("start " + self.filename)
-            except Exception:
-                raise Exception("Couldn't open file")
+
+        utils.open_files([self.filepath])
 
     def rename(self, newname, verbose=True):
         """
