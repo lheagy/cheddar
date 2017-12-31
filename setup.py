@@ -33,7 +33,6 @@ setup(
         'future',
         'datetime',
         'dateutil',
-        'git+https://github.com/smarnach/pyexiftool.git'
     ],
     author = 'Lindsey Heagy',
     author_email = 'lheagy@eos.ubc.ca',

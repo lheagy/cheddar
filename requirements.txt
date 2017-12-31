@@ -1,1 +1,4 @@
--e .
+future
+datetime
+dateutil
+git+https://github.com/smarnach/pyexiftool.git
