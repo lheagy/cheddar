@@ -1,0 +1,15 @@
+language: python
+python:
+- 2.7
+- 3.6
+
+sudo: false
+
+install:
+  - apt-get install libimage-exiftool-perl
+  - python setup.py install
+  - pip install -r requirements_dev.txt
+  - make build
+
+script:
+  - nosetests tests
