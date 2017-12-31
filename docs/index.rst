@@ -8,6 +8,8 @@
 .. toctree::
    :maxdepth: 2
 
+   content/media
+   content/library
    content/utils
 
 
