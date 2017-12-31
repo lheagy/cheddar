@@ -1,6 +1,5 @@
 from exiftool import ExifTool
 import datetime
-import dateutil
 
 
 def get_metadata(filepath):
@@ -42,9 +41,9 @@ def filename_by_date(
     """
 
     if timeshift is None:
-        timeshift = 0
+        timeshift = {"seconds": 0}
 
-    shift = datetime.timedelta(timeshift)
+    shift = datetime.timedelta(**timeshift)
     image_datetime += shift
 
     filename = (

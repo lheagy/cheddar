@@ -1,4 +1,4 @@
 future
 datetime
-dateutil
+parse
 git+https://github.com/smarnach/pyexiftool.git

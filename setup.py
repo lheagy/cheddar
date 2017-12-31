@@ -32,10 +32,10 @@ setup(
     install_requires = [
         'future',
         'datetime',
-        'dateutil',
+        'parse',
     ],
     author = 'Lindsey Heagy',
-    author_email = 'lheagy@eos.ubc.ca',
+    author_email = 'lindseyheagy@gmail.com',
     description = 'saycheese',
     long_description = LONG_DESCRIPTION,
     keywords = 'photos, videos',

@@ -1,10 +1,14 @@
 import os
 import properties
 import datetime
+import parse
 
 from . import utils
 
-DATETIMEKEY = u"EXIF:DateTimeOriginal"
+DATETIMEKEY = {
+    u"EXIF:DateTimeOriginal": "{year:d}:{month:d}:{day:d} {hour:d}:{minute:d}:{second:d}",
+    u"File:FileModifyDate": "{year:d}:{month:d}:{day:d} {hour:d}:{minute:d}:{second:d}-{}"
+}
 
 
 class Media(properties.HasProperties):
@@ -87,30 +91,46 @@ class Media(properties.HasProperties):
         :return: datetime object of when the media was created
         """
 
-        date, time = self.metadata[DATETIMEKEY].split()
+        img_datetime = None
 
-        year, month, day = date.split(':')
-        hour, minute, second = time.split(':')
+        for key in DATETIMEKEY:
+            if key in self.metadata:
+                img_datetime = self.metadata[key]
+                datetime_format = DATETIMEKEY[key]
 
-        return datetime.datetime(
-            year=int(year), month=int(month), day=int(day),
-            hour=int(hour), minute=int(minute), second=int(second)
-        )
+        if img_datetime is None:
+            raise Exception("Could not find datetime info in metadata")
+
+        parsed_datetime = parse.parse(datetime_format, img_datetime)
+
+        return datetime.datetime(**parsed_datetime.named)
+
+    def open(self):
+        """
+        Open the file with the default application
+        """
+        try:
+            os.system("open " + self.filepath)
+        except Exception:
+            try:
+                os.system("start " + self.filename)
+            except Exception:
+                raise Exception("Couldn't open file")
 
     def rename(self, newname, verbose=True):
         """
-        Rename the photo
+        Rename the media
 
-        :param str newname: new filename (including path)
+        :param str newname: new filename (excluding path)
         :verbose bool verbose: print information about file changes
         """
 
         # return if current and new names are the same
-        if self.filepath == newname:
+        if self.name == newname:
             return
 
         # check if file already named the same, if so, add a -1
-        while os.path.isfile(newname):
+        while os.path.isfile(self.directory + os.path.sep + newname):
             newname = newname.split(".")
             if len(newname[-2].split("-")) > 1:
                 nameend = newname[-2].split("-")
@@ -121,18 +141,20 @@ class Media(properties.HasProperties):
                 newname[-2] += "-1"
             newname = ".".join(newname)
 
+        newnamefull = self.directory + os.path.sep + newname
+
         # print change
         if verbose is True:
-            print("renaming {} to {}".format(self.filepath, newname))
+            print("renaming {} to {}".format(self.filepath, newnamefull))
 
         # rename file
-        os.rename(self.filepath, newname)
+        os.rename(self.filepath, newnamefull)
 
         # clear attributes
         [setattr(self, attr, None) for attr in self._clear_on_update]
 
         # set new filepath
-        self.filepath = newname
+        self.filepath = newnamefull
         return
 
     def rename_by_date(
@@ -159,10 +181,7 @@ class Media(properties.HasProperties):
             filename_format=filename_format
         )
 
-        # assemble with full path
-        newfilepath = os.path.sep.join([self.directory, newname])
-
-        self.rename(newfilepath, verbose)
+        self.rename(newname, verbose)
 
 
 
