@@ -23,7 +23,6 @@ class Library(properties.HasProperties):
     def __init__(self, directory):
         super(Library, self).__init__()
         self.directory = directory
-        if os.isfile(self.directory + os.path.sep + )
 
     @properties.validator('directory')
     def _ensure_abspath(self, change):
