@@ -6,8 +6,10 @@ import datetime
 
 import cheddar
 
-
-ASSET_TAR = os.path.abspath(os.path.expanduser("./assets.tar.gz"))
+ASSET_TAR = (
+    os.path.dirname(os.path.abspath( __file__ )) + os.path.sep +
+    "assets.tar.gz"
+)
 ASSET_DIR = '.'.join(ASSET_TAR.split('.')[:-2])
 
 
